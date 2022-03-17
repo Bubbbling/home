@@ -1,0 +1,80 @@
+我的家乡余杭是一个非常美丽的地方，这里有一座通济大桥，横跨河流，每到晚上，这里总是灯火通明
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定位</title>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=234969563d5e8fd4716c7b278a1a1374"></script>
+    <style>
+        html,
+        body,
+        #container{
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+</head>
+<body>
+<img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.tourzj.com%2Fadmin%2Fupload%2Fimage%2F6364937787823345268151450.jpg&refer=http%3A%2F%2Fimg.tourzj.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650075802&t=097b971d0442f3d9c34e8963fae2997a">
+<div id="container">
+
+</div>
+
+<script>
+    //初始化地图
+    var map = new AMap.Map('container', {
+        zoom:13,//级别
+        viewMode:'3D',//使用3D视图
+        resizeEnable:true,//可变尺寸大小
+    });
+    //实时路况
+    var  trafficLayer = new AMap.TileLayer.Traffic({
+        zInedx: 10
+    });
+
+    var marker = new AMap.Marker({
+        position:[116.49,39.9]//位置
+    })
+    map.add(marker);
+    //定位
+    mapObj = new AMap.Map('container');
+
+
+    mapObj.plugin('AMap.Geolocation', function () {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+            convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+            showButton: true,        //显示定位按钮，默认：true
+            buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+            showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+            panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+            zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+        });
+
+
+        mapObj.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+        geolocation.position
+
+    });
+
+    function onComplete(obj) {
+          alert(obj.location_type+"定位")
+    }
+    function onError(obj) {
+        alert(obj.info + '--' + obj.message);
+        console.log(obj);
+    }
+
+</script>
+
+</body>
+</html>
